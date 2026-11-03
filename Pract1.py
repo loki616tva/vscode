@@ -27,7 +27,7 @@ print("Initial environment:", environment)
 
 for i in range(8):
     action = vaccum_agent(location, environment[location])
-
+    print(f"Location {location} : {environment[location]}: Action: {action}")
     if action == 'Suck':
         environment[location] = 'Clean'
     elif action == 'Down':
@@ -39,7 +39,7 @@ for i in range(8):
     elif action == 'Left':
         location = 'C'
 
-    print(f"Location {location} : {environment[location]}")
+
 
 print("Updated environment:", environment) 
 
