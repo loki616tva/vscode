@@ -1,0 +1,171 @@
+import random
+
+# Distance between cities
+distance = [
+    [0, 10, 15, 20],
+    [10, 0, 35, 25],
+    [15, 35, 0, 30],
+    [20, 25, 30, 0]
+]
+
+n = len(distance)
+k = 2
+
+
+# Calculate total distance
+def calculate_cost(route):
+    cost = 0
+
+    for i in range(n - 1):
+        cost += distance[route[i]][route[i + 1]]
+
+    cost += distance[route[-1]][route[0]]
+
+    return cost
+
+
+# Generate neighboring routes
+def get_neighbors(route):
+    neighbors = []
+
+    for i in range(1, n):
+        for j in range(i + 1, n):
+            new_route = route.copy()
+            new_route[i], new_route[j] = new_route[j], new_route[i]
+            neighbors.append(new_route)
+
+    return neighbors
+
+
+# Local Beam Search
+def local_beam_search():
+
+    beam = []
+
+    # Generate initial random routes
+    for i in range(k):
+        route = list(range(n))
+        remaining = route[1:]
+        random.shuffle(remaining)
+        route = [0] + remaining
+        beam.append(route)
+
+    print("Initial Routes:", beam)
+
+    while True:
+
+        all_neighbors = []
+
+        # Generate neighbors
+        for route in beam:
+            all_neighbors.extend(get_neighbors(route))
+
+        # Sort routes by distance
+        all_neighbors.sort(key=calculate_cost)
+
+        # Select k best routes
+        new_beam = all_neighbors[:k]
+
+        print("\nSelected Routes:", new_beam)
+
+        # Stop if no improvement
+        if not new_beam or calculate_cost(new_beam[0]) >= min(map(calculate_cost, beam)):
+            break
+
+        beam = new_beam
+
+    # Best route
+    best_route = min(beam, key=calculate_cost)
+
+    print("\nBest Route:", best_route + [best_route[0]])
+    print("Minimum Distance:", calculate_cost(best_route))
+
+
+local_beam_search()
+
+
+# import random
+
+# # User input
+# n = int(input("Enter number of cities: "))
+
+# print("Enter distance matrix:")
+# distance = []
+
+# for i in range(n):
+#     row = list(map(int, input().split()))
+#     distance.append(row)
+
+# k = int(input("Enter beam size (k): "))
+
+
+# # Calculate total distance
+# def calculate_cost(route):
+#     cost = 0
+
+#     for i in range(n - 1):
+#         cost += distance[route[i]][route[i + 1]]
+
+#     cost += distance[route[-1]][route[0]]
+
+#     return cost
+
+
+# # Generate neighboring routes
+# def get_neighbors(route):
+#     neighbors = []
+
+#     for i in range(1, n):
+#         for j in range(i + 1, n):
+#             new_route = route.copy()
+#             new_route[i], new_route[j] = new_route[j], new_route[i]
+#             neighbors.append(new_route)
+
+#     return neighbors
+
+
+# # Local Beam Search
+# def local_beam_search():
+
+#     beam = []
+
+#     # Generate initial random routes
+#     for i in range(k):
+#         route = list(range(n))
+#         remaining = route[1:]
+#         random.shuffle(remaining)
+#         route = [0] + remaining
+#         beam.append(route)
+
+#     print("\nInitial Routes:", beam)
+
+#     while True:
+
+#         all_neighbors = []
+
+#         # Generate neighbors
+#         for route in beam:
+#             all_neighbors.extend(get_neighbors(route))
+
+#         # Sort routes by distance
+#         all_neighbors.sort(key=calculate_cost)
+
+#         # Select k best routes
+#         new_beam = all_neighbors[:k]
+
+#         print("\nSelected Routes:", new_beam)
+
+#         # Stop if no improvement
+#         if not new_beam or calculate_cost(new_beam[0]) >= min(map(calculate_cost, beam)):
+#             break
+
+#         beam = new_beam
+
+#     # Best route
+#     best_route = min(beam, key=calculate_cost)
+
+#     print("\nBest Route:", best_route + [best_route[0]])
+#     print("Minimum Distance:", calculate_cost(best_route))
+
+
+# local_beam_search()

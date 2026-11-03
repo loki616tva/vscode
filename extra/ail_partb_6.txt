@@ -1,0 +1,90 @@
+# Goal Stack Planning - Blocks World
+
+# Initial State
+state = {
+    "A": "B",
+    "B": "Table",
+    "C": "Table"
+}
+
+# Goal State
+goals = [
+    ("ONTABLE", "A"),
+    ("ON", "B", "A"),
+    ("ON", "C", "B")
+]
+
+stack = list(reversed(goals))
+
+
+# Check whether a block is clear
+def clear(block):
+    for b in state:
+        if state[b] == block:
+            return False
+    return True
+
+
+# Move a block
+def move(block, destination):
+
+    if clear(block) and (destination == "Table" or clear(destination)):
+        old = state[block]
+        state[block] = destination
+
+        print("Move", block, "from", old, "to", destination)
+
+
+# Goal Stack Planning
+def goal_stack_planning():
+
+    while stack:
+
+        goal = stack.pop()
+
+        if goal[0] == "ONTABLE":
+
+            block = goal[1]
+
+            if state[block] != "Table":
+
+                if not clear(block):
+                    for b in state:
+                        if state[b] == block:
+                            stack.append(goal)
+                            stack.append(("ONTABLE", b))
+                            break
+                else:
+                    move(block, "Table")
+
+        elif goal[0] == "ON":
+
+            block, destination = goal[1], goal[2]
+
+            if state[block] != destination:
+
+                if not clear(block):
+                    for b in state:
+                        if state[b] == block:
+                            stack.append(goal)
+                            stack.append(("ONTABLE", b))
+                            break
+
+                elif not clear(destination):
+                    for b in state:
+                        if state[b] == destination:
+                            stack.append(goal)
+                            stack.append(("ONTABLE", b))
+                            break
+
+                else:
+                    move(block, destination)
+
+    print("\nFinal State:")
+    for b in state:
+        print(b, "->", state[b])
+
+    print("\nGoal Achieved!")
+
+
+goal_stack_planning()

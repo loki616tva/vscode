@@ -1,0 +1,106 @@
+# grid=[
+#     [0,0,1,0],
+#     [1,0,1,0],
+#     [0,0,0,0],
+#     [0,1,1,0],
+# ]
+# start=(0,0)
+# goal=(3,3)
+
+# visited=set()
+
+# moves=[
+#     (-1,0),
+#     (1,0),
+#     (0,-1),
+#     (0,1)
+# ]
+
+# def is_valid(row,col):
+#     if(row<0 or row>=len(grid) or col<0 or col>=len(grid[0])):
+#         return False
+#     if(grid[row][col]==1):
+#         return False
+#     if((row,col) in visited):
+#         return False
+#     return True
+
+# def model_based_agent(position):
+#     row,col=position
+
+#     visited.add(position)
+#     print("Current Position:",position)
+
+#     if(position==goal):
+#         print("Goal Reached!")
+#         return True
+
+#     for dr,dc in moves:
+#         new_row,new_col=row+dr,col+dc
+#         if(is_valid(new_row,new_col)):
+#             print("Moving to:",(new_row,new_col))
+#             if(model_based_agent((new_row,new_col))):
+#                 return True
+
+#     return False        
+
+
+# print("grid navigation using model-based agent")
+# if(model_based_agent(start)):
+#     print("Path found to the goal!")
+# else:
+#     print("Path not found")    
+
+# print("Visited Positions:",visited)
+
+grid=[
+    [0,0,1,0],
+    [1,0,1,1],
+    [1,0,0,0],
+    [1,1,1,0],
+]
+start=(0,0)
+goal=(3,3)
+
+visited=set()
+moves=[
+    (-1,0),
+    (1,0),
+    (0,-1),
+    (0,1)
+]
+
+def is_valid(row,col):
+    if(row<0 or row>=len(grid) or col<0 or col>=len(grid[row])):
+        return False
+    elif grid[row][col]==1:
+        return False
+    elif (row,col) in visited:
+        return False
+    return True
+
+def model_based_agent(position):
+    row,col=position
+
+    visited.add(position)
+    print("Current Position:",position)
+    if(goal==position):
+        print("Goal Reached")
+        return True   
+
+    for  dr,dc in moves:
+        new_row,new_col=row+dr,col+dc
+        if(is_valid(new_row,new_col)):
+            print("Moving To:",(new_row,new_col))      
+            if(model_based_agent((new_row,new_col))):
+                return True
+    return False             
+
+
+print("grid navigation using model-based agent")
+if(model_based_agent(start)):
+    print("Path found to the goal!")
+else:
+    print("Path not found")    
+
+print("Visited Positions:",visited)
